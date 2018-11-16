@@ -1,0 +1,61 @@
+name: crypto-depth-backend
+version: '0.1.0.0'
+category: value
+author: Rune K. Svendsen
+maintainer: runesvend@gmail.com
+copyright: CC0
+license: BSD3
+github: runeksvendsen/crypto-depth-backend
+extra-source-files:
+- README.md
+library:
+  source-dirs: src
+  exposed-modules:
+  - CryptoDepth.Backend
+  dependencies:
+  - base >=4.7 && <5
+  - crypto-depth-backend-api
+  - crypto-depth-db
+  - protolude
+  - aeson
+  - servant-server
+  - wai
+  - warp
+  - text
+  - pagination
+  - mtl
+  - resource-pool
+  - postgresql-simple
+  - time
+  - bytestring
+  - beam-core
+  - beam-postgres
+  - tagged
+
+executables:
+  crypto-depth-backend-exe:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - base
+    - crypto-depth-backend
+
+# tests:
+#   crypto-depth-backend-test:
+#     main: Spec.hs
+#     source-dirs: test
+#     ghc-options:
+#     - -threaded
+#     - -rtsopts
+#     - -with-rtsopts=-N
+#     dependencies:
+#     - base
+#     - crypto-depth-backend
+#     - hspec
+#     - hspec-wai
+#     - hspec-wai-json
+#     - aeson
