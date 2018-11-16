@@ -12,6 +12,7 @@ module CryptoDepth.Backend.Types.AppM
 where
 
 import Protolude                            (toS)
+import CryptoDepth.Backend.Types.Config     as Config
 import Control.Monad.Reader                 ( ReaderT, MonadReader, MonadIO
                                             , liftIO, runReaderT, asks
                                             )
@@ -23,29 +24,6 @@ import Data.Time.Clock                      (NominalDiffTime)
 import qualified Database.Beam              as Beam
 import Database.Beam.Postgres               (Pg)
 
-
-data Config
-   = Config
-   { cfgPool            :: Pool.Pool Connection
-   }
-
--- | See documentation for 'createPool'
-data PoolConfig
-    = PoolConfig
-    { dbConnStr         :: String
-    , numStripes        :: Int              -- ^ Number of striped
-    , numConnPerStripe  :: Int              -- ^ Number of connections per stripe
-    , keepOpenTimeout   :: NominalDiffTime  -- ^ How long to keep idle connections open
-    }
-
-mkConfig :: PoolConfig -> IO Config
-mkConfig PoolConfig{..} = Config <$>
-    Pool.createPool
-        (connectPostgreSQL $ toS dbConnStr)
-        close
-        numStripes
-        keepOpenTimeout
-        numConnPerStripe
 
 newtype AppM a = AppM
     { getAppM :: ReaderT Config Handler a }
