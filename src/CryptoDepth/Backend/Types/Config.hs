@@ -29,10 +29,12 @@ data PoolConfig
     }
 
 mkConfig :: PoolConfig -> IO Config
-mkConfig PoolConfig{..} = Config <$>
-    Pool.createPool
+mkConfig PoolConfig{..} = do
+    pool <- Pool.createPool
         (connectPostgreSQL $ toS dbConnStr)
         close
         numStripes
         keepOpenTimeout
         numConnPerStripe
+    _ <- Pool.withResource pool return  -- HACK: fail fast in case of invalid connection string
+    return $ Config pool
