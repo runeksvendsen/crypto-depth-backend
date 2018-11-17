@@ -14,16 +14,14 @@ import qualified CryptoDepth.Backend.Handler.Numeraires
 import qualified CryptoDepth.Backend.Handler.PathSums
 import qualified CryptoDepth.Backend.Handler.Paths
 
-import Data.Aeson
-import Network.Wai
-import Network.Wai.Handler.Warp
+import qualified Network.Wai.Handler.Warp                   as Warp
 import Servant
 
 
 runApp :: Int -> PoolConfig -> IO ()
 runApp port poolCfg = do
     cfg <- mkConfig poolCfg
-    run port (app cfg)
+    Warp.run port (app cfg)
 
 app :: Config -> Application
 app cfg = serve api $ hoistServer api (runAppM cfg) server
