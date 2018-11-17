@@ -8,7 +8,7 @@ packages:
   extra-dep: true
 - location:
     git: https://github.com/runeksvendsen/crypto-depth-db.git
-    commit: 6926b61f5b4ad6ed91993872d9be4ad8c56e9ee1
+    commit: 454389a98ac2b0071dcf1ee90366374d2dc21ac3
   extra-dep: true
 - location:
     git: https://github.com/runeksvendsen/beam.git

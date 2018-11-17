@@ -8,6 +8,8 @@ module CryptoDepth.Backend.Types.AppM
 , PoolConfig(..)
 , mkConfig
 , runDb
+-- * Re-exports
+, liftIO
 )
 where
 
@@ -40,8 +42,12 @@ runAppM :: Config -> AppM a -> Handler a
 runAppM cfg appM =
     runReaderT (getAppM appM) cfg
 
-runDb :: Pg a -> AppM a
-runDb pg = do
+withDbConn :: (Connection -> IO a) -> AppM a
+withDbConn f = do
     pool <- asks cfgPool
-    liftIO . Pool.withResource pool $ \conn ->
+    liftIO $ Pool.withResource pool f
+
+runDb :: Pg a -> AppM a
+runDb pg =
+    withDbConn $ \conn ->
         Beam.withDatabase conn pg
